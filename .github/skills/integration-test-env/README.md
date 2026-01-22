@@ -19,14 +19,27 @@ integration-test-env/
 ### Direct Execution
 
 ```bash
-cd .copilot/skills/integration-test-env
+cd .github/skills/integration-test-env
+
+# Create virtual environment (recommended)
+python -m venv .venv
+
+# Activate virtual environment
+# On Windows:
+.venv\Scripts\activate
+# On Linux/Mac:
+source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Run example
+# Run example (starts postgres and redis by default)
 python skill.py
+
+# Press Ctrl+C to stop and remove all containers
 ```
+
+**Note**: Once the virtual environment is activated, use `python` and `pip` commands directly. They will automatically use the venv's Python interpreter.
 
 ### Via GitHub Copilot
 
@@ -48,11 +61,13 @@ Once this skill is in your workspace, Copilot will automatically detect it and u
 
 ## Features
 
-- ✅ Automatic service detection from code
+- ✅ Automatic Docker image pulling if not available locally
+- ✅ Handles container name conflicts (removes existing containers)
 - ✅ Concurrent startup for fast initialization
 - ✅ Health checks ensure services are ready
 - ✅ Clean connection strings provided
-- ✅ Proper cleanup on shutdown
+- ✅ Proper cleanup on shutdown (stops AND removes containers)
+- ✅ Graceful Ctrl+C handling with immediate container tracking
 - ✅ Portable across environments (self-contained)
 
 ## Example
@@ -61,7 +76,7 @@ Once this skill is in your workspace, Copilot will automatically detect it and u
 from skill import IntegrationTestEnvironment
 
 async def setup_tests():
-    env = IntegrationTestEnvironment(name_prefix="myapp")
+    env = IntegrationTestEnvironment(name_prefix="myapp_test")
     
     # Start multiple services
     services = await env.start_services(["postgres", "redis"])
@@ -72,9 +87,17 @@ async def setup_tests():
     
     # Run your integration tests...
     
-    # Cleanup
+    # Cleanup (stops AND removes containers)
     await env.stop_all()
 ```
+
+## How It Works
+
+1. **Image Management**: Automatically pulls Docker images if they don't exist locally
+2. **Conflict Resolution**: Removes any existing containers with the same name before creating new ones
+3. **Immediate Tracking**: Containers are tracked as soon as they're created, ensuring proper cleanup even if interrupted during health checks
+4. **Graceful Shutdown**: Pressing Ctrl+C triggers proper cleanup that stops and removes all containers
+5. **No Orphans**: All containers are properly cleaned up, nothing left running in Docker Desktop
 
 ## Why Portable?
 

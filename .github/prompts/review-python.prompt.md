@@ -5,11 +5,13 @@ Perform a comprehensive review of the selected Python code using available tools
 ## Analysis Steps
 
 ### 1. Static Analysis
-Use #tool:pylance to check for:
+Run mypy to check for:
 - Type errors and missing type hints
 - Undefined variables or imports
 - Unused imports and variables
 - Import organization issues
+
+Command: `mypy <file_path>`
 
 ### 2. Code Quality
 Review for:
@@ -48,7 +50,7 @@ Use @workspace to verify:
 - Tests follow pytest conventions
 
 ### 7. Project Standards
-Reference #file:.github/copilot-instructions.md to ensure:
+Reference [copilot-instructions.md](../copilot-instructions.md) to ensure:
 - Code follows project naming conventions
 - Error handling matches project patterns
 - Dependencies are properly managed
