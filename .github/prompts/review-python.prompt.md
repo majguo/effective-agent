@@ -50,9 +50,9 @@ Use @workspace to verify:
 - Tests follow pytest conventions
 
 ### 7. Project Standards
-Reference [copilot-instructions.md](../copilot-instructions.md) to ensure:
-- Code follows project naming conventions
-- Error handling matches project patterns
+Check .github/copilot-instructions.md in the workspace to ensure:
+- Code follows project naming conventions (PascalCase for classes, camelCase for methods)
+- Error handling matches project patterns (try/catch with contextual logging)
 - Dependencies are properly managed
 
 ## Output Format
